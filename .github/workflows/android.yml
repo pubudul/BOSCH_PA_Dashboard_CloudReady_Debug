@@ -1,12 +1,11 @@
 name: Build Android Debug APK
 on:
   workflow_dispatch:
-  push:
-    branches: [ main, master ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -18,11 +17,13 @@ jobs:
           java-version: 17
 
       - name: Install Gradle
-        uses: gradle/actions/setup-gradle@v3
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gradle
 
       - name: Build Debug APK
         run: |
-          chmod +x gradlew || true
+          gradle wrapper
           ./gradlew assembleDebug
 
       - name: Upload APK
